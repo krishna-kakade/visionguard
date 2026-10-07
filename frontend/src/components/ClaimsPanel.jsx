@@ -6,17 +6,17 @@ export default function ClaimsPanel({ claims }) {
     return (
       <div className="card">
         <h4 className="card-title">
-          <ShieldAlert size={18} color="var(--accent-blue)" />
+          <ShieldAlert size={17} color="var(--accent-blue)" />
           <span>Factual Claim Verification</span>
         </h4>
         <div style={{
           padding: '1.5rem',
           textAlign: 'center',
           backgroundColor: 'var(--bg-secondary)',
-          borderRadius: '8px',
+          borderRadius: '4px',
           border: '1px dashed var(--border-subtle)',
           color: 'var(--text-dim)',
-          fontSize: '0.85rem'
+          fontSize: '0.82rem'
         }}>
           No factual claims were identified in the image text to verify.
         </div>
@@ -27,11 +27,11 @@ export default function ClaimsPanel({ claims }) {
   return (
     <div className="card">
       <h4 className="card-title">
-        <ShieldAlert size={18} color="var(--accent-cyan)" />
+        <ShieldAlert size={17} color="var(--accent-blue)" />
         <span>Factual Claim Verification ({claims.length})</span>
       </h4>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
         {claims.map((item, idx) => {
           const verdict = item.verdict || 'UNVERIFIED';
           
@@ -52,33 +52,33 @@ export default function ClaimsPanel({ claims }) {
               style={{
                 backgroundColor: 'var(--bg-secondary)',
                 border: '1px solid var(--border-subtle)',
-                borderRadius: '8px',
-                padding: '1rem'
+                borderRadius: '4px',
+                padding: '0.85rem'
               }}
             >
               {/* Claim header & verdict badge */}
-              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '1rem', marginBottom: '0.5rem' }}>
-                <p style={{ fontSize: '0.92rem', fontWeight: 600, color: '#fff', lineHeight: 1.4 }}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '1rem', marginBottom: '0.4rem' }}>
+                <p style={{ fontSize: '0.88rem', fontWeight: 600, color: '#fff', lineHeight: 1.4 }}>
                   "{item.claim}"
                 </p>
                 <span className={`badge ${verdictClass}`} style={{ flexShrink: 0 }}>
-                  <VerdictIcon size={14} />
+                  <VerdictIcon size={13} />
                   <span>{verdict}</span>
                 </span>
               </div>
 
               {/* Evidence statement */}
-              <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginBottom: '0.5rem', lineHeight: 1.45 }}>
+              <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.5rem', lineHeight: 1.45 }}>
                 {item.evidence || 'No corroborating evidence found.'}
               </p>
 
               {/* Provider & Source */}
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.75rem', color: 'var(--text-dim)', paddingTop: '0.4rem', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.74rem', color: 'var(--text-dim)', paddingTop: '0.35rem', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
                 <span>Provider: <strong style={{ color: 'var(--text-muted)' }}>{item.provider || 'Local Knowledge'}</strong></span>
                 {item.source && (
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', color: 'var(--accent-cyan)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', color: 'var(--accent-blue)' }}>
                     <span>Source: {item.source}</span>
-                    <ExternalLink size={12} />
+                    <ExternalLink size={11} />
                   </div>
                 )}
               </div>

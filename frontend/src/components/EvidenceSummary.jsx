@@ -11,7 +11,7 @@ export default function EvidenceSummary({ analysisId, finalSummary, evidenceBull
       {/* Evidence Explanation Card */}
       <div className="card">
         <h4 className="card-title">
-          <HelpCircle size={18} color="var(--accent-cyan)" />
+          <HelpCircle size={18} color="var(--accent-blue)" />
           <span>Why did VisionGuard reach this result?</span>
         </h4>
 
@@ -24,7 +24,7 @@ export default function EvidenceSummary({ analysisId, finalSummary, evidenceBull
             padding: '0.85rem 1rem',
             backgroundColor: 'var(--bg-secondary)',
             borderRadius: '8px',
-            borderLeft: '3px solid var(--accent-cyan)'
+            borderLeft: '3px solid var(--accent-blue)'
           }}>
             {finalSummary}
           </p>
@@ -68,7 +68,7 @@ export default function EvidenceSummary({ analysisId, finalSummary, evidenceBull
             className="btn-secondary"
             style={{ textDecoration: 'none', fontSize: '0.88rem', padding: '0.6rem 1.25rem' }}
           >
-            <FileJson size={16} color="var(--accent-cyan)" />
+            <FileJson size={16} color="var(--accent-blue)" />
             <span>Export Raw JSON Data</span>
           </a>
         </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Shield, Activity, Sparkles, RefreshCw } from 'lucide-react';
+import { Shield, Sparkles, RefreshCw } from 'lucide-react';
 
 export default function Navbar({ healthStatus, onTriggerDemo, isAnalyzing, onReset }) {
   const isOnline = healthStatus?.status === 'ok';
@@ -7,8 +7,7 @@ export default function Navbar({ healthStatus, onTriggerDemo, isAnalyzing, onRes
   return (
     <header style={{
       borderBottom: '1px solid var(--border-subtle)',
-      backgroundColor: 'rgba(13, 21, 39, 0.85)',
-      backdropFilter: 'blur(12px)',
+      backgroundColor: 'rgba(17, 24, 39, 0.95)',
       position: 'sticky',
       top: 0,
       zIndex: 50,
@@ -21,27 +20,28 @@ export default function Navbar({ healthStatus, onTriggerDemo, isAnalyzing, onRes
           style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer' }}
         >
           <div style={{
-            background: 'linear-gradient(135deg, #0284c7 0%, #00f0ff 100%)',
-            padding: '8px',
-            borderRadius: '10px',
+            backgroundColor: '#1e293b',
+            border: '1px solid #334155',
+            padding: '7px',
+            borderRadius: '6px',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
-            boxShadow: '0 0 15px rgba(0, 240, 255, 0.3)'
+            justifyContent: 'center'
           }}>
-            <Shield size={24} color="#070c18" strokeWidth={2.5} />
+            <Shield size={20} color="var(--accent-blue)" strokeWidth={2.2} />
           </div>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <h1 style={{ fontSize: '1.25rem', fontWeight: 800, letterSpacing: '0.04em', color: '#fff' }}>
-                VISION<span style={{ color: 'var(--accent-cyan)' }}>GUARD</span>
+              <h1 style={{ fontSize: '1.15rem', fontWeight: 700, letterSpacing: '0.02em', color: '#fff' }}>
+                VISION<span style={{ color: 'var(--accent-blue)' }}>GUARD</span>
               </h1>
               <span style={{
                 fontSize: '0.65rem',
-                backgroundColor: 'rgba(2, 132, 199, 0.2)',
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
                 color: 'var(--accent-blue)',
-                padding: '2px 6px',
-                borderRadius: '4px',
+                padding: '2px 5px',
+                borderRadius: '3px',
+                border: '1px solid rgba(59, 130, 246, 0.25)',
                 fontFamily: 'var(--font-mono)',
                 fontWeight: 600
               }}>v1.0</span>
@@ -53,43 +53,39 @@ export default function Navbar({ healthStatus, onTriggerDemo, isAnalyzing, onRes
         </div>
 
         {/* Right actions & Health indicator */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
           {/* Health status indicator */}
           <div style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '0.4rem',
-            padding: '0.35rem 0.75rem',
-            borderRadius: '20px',
+            gap: '0.45rem',
+            padding: '0.3rem 0.65rem',
+            borderRadius: '4px',
             backgroundColor: 'var(--bg-secondary)',
             border: '1px solid var(--border-subtle)',
-            fontSize: '0.78rem',
+            fontSize: '0.76rem',
             fontFamily: 'var(--font-mono)'
           }}>
             <div style={{
-              width: '8px',
-              height: '8px',
+              width: '7px',
+              height: '7px',
               borderRadius: '50%',
-              backgroundColor: isOnline ? 'var(--status-authentic)' : 'var(--status-fake)',
-              boxShadow: isOnline ? '0 0 8px #10b981' : '0 0 8px #ef4444'
+              backgroundColor: isOnline ? 'var(--status-authentic)' : 'var(--status-fake)'
             }} />
-            <span style={{ color: isOnline ? '#e2e8f0' : '#f87171' }}>
-              {isOnline ? 'Core: Online' : 'Core: Offline'}
+            <span style={{ color: isOnline ? '#cbd5e1' : '#f87171' }}>
+              {isOnline ? 'System Online' : 'System Offline'}
             </span>
           </div>
 
-          {/* Demo Mode Button (Rule 48) */}
+          {/* Demo Mode Button */}
           <button
             onClick={onTriggerDemo}
             disabled={isAnalyzing}
             className="btn-secondary"
             title="Load sample precomputed forensic investigation"
-            style={{
-              borderColor: 'rgba(168, 85, 247, 0.4)',
-              color: '#d8b4fe'
-            }}
+            style={{ fontSize: '0.82rem', padding: '0.45rem 0.85rem' }}
           >
-            <Sparkles size={16} color="#c084fc" />
+            <Sparkles size={14} color="var(--accent-blue)" />
             <span>Load Demo Case</span>
           </button>
 
@@ -98,8 +94,9 @@ export default function Navbar({ healthStatus, onTriggerDemo, isAnalyzing, onRes
             onClick={onReset}
             className="btn-secondary"
             title="Start new analysis"
+            style={{ fontSize: '0.82rem', padding: '0.45rem 0.85rem' }}
           >
-            <RefreshCw size={15} />
+            <RefreshCw size={14} />
             <span>New Scan</span>
           </button>
         </div>

@@ -43,7 +43,7 @@ export default function SuspiciousRegions({ analysisId, artifacts }) {
     <div className="card">
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.75rem' }}>
         <div className="card-title" style={{ margin: 0 }}>
-          <Layers size={18} color="var(--accent-cyan)" />
+          <Layers size={18} color="var(--accent-blue)" />
           <span>Multimodal Forensic Artifact Comparator</span>
         </div>
 
@@ -73,7 +73,7 @@ export default function SuspiciousRegions({ analysisId, artifacts }) {
                   fontSize: '0.78rem',
                   fontWeight: isSelected ? 600 : 400,
                   backgroundColor: isSelected ? 'var(--bg-card)' : 'transparent',
-                  color: isSelected ? 'var(--accent-cyan)' : hasArtifact ? 'var(--text-muted)' : 'var(--text-dim)',
+                  color: isSelected ? 'var(--accent-blue)' : hasArtifact ? 'var(--text-muted)' : 'var(--text-dim)',
                   boxShadow: isSelected ? '0 2px 8px rgba(0,0,0,0.3)' : 'none',
                   border: isSelected ? '1px solid var(--border-subtle)' : '1px solid transparent',
                   opacity: hasArtifact ? 1 : 0.4,

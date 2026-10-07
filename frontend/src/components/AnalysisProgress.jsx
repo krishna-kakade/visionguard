@@ -17,7 +17,6 @@ const STAGES = [
 ];
 
 export default function AnalysisProgress({ currentStep, status, errorMessage }) {
-  // Determine current active stage index
   const stepLower = (currentStep || '').toLowerCase();
   
   let activeIndex = 0;
@@ -37,36 +36,35 @@ export default function AnalysisProgress({ currentStep, status, errorMessage }) 
   const isFailed = status === 'failed';
 
   return (
-    <div style={{ maxWidth: '640px', margin: '2rem auto' }} className="card">
+    <div style={{ maxWidth: '620px', margin: '2rem auto' }} className="card">
       <div style={{ textAlign: 'center', marginBottom: '1.75rem' }}>
         <div style={{
           display: 'inline-flex',
-          padding: '12px',
+          padding: '10px',
           borderRadius: '50%',
-          backgroundColor: isFailed ? 'rgba(239, 68, 68, 0.15)' : 'rgba(2, 132, 199, 0.15)',
-          marginBottom: '1rem',
-          border: `1px solid ${isFailed ? 'rgba(239, 68, 68, 0.4)' : 'rgba(2, 132, 199, 0.4)'}`
+          backgroundColor: isFailed ? 'rgba(220, 38, 38, 0.12)' : 'rgba(37, 99, 235, 0.12)',
+          marginBottom: '0.85rem',
+          border: `1px solid ${isFailed ? 'rgba(220, 38, 38, 0.3)' : 'rgba(37, 99, 235, 0.3)'}`
         }}>
           {isFailed ? (
-            <AlertCircle size={32} color="#ef4444" />
+            <AlertCircle size={28} color="#dc2626" />
           ) : (
-            <Loader2 size={32} color="var(--accent-cyan)" className="pulse" style={{ animation: 'spin 1.5s linear infinite' }} />
+            <Loader2 size={28} color="var(--accent-blue)" style={{ animation: 'spin 1.5s linear infinite' }} />
           )}
         </div>
-        <h3 style={{ fontSize: '1.35rem', fontWeight: 700, color: '#fff', marginBottom: '0.25rem' }}>
+        <h3 style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--text-main)', marginBottom: '0.25rem' }}>
           {isFailed ? 'Investigation Halted' : 'Forensic Investigation in Progress'}
         </h3>
-        <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+        <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
           {isFailed ? (errorMessage || 'An error occurred during analysis.') : `Current stage: ${currentStep || 'Initializing pipeline...'}`}
         </p>
       </div>
 
       {/* Progress Timeline List */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
         {STAGES.map((stage, idx) => {
           const isDone = idx < activeIndex || status === 'completed';
           const isCurrent = idx === activeIndex && status !== 'completed' && !isFailed;
-          const isPending = idx > activeIndex && !isFailed;
 
           return (
             <div
@@ -74,34 +72,33 @@ export default function AnalysisProgress({ currentStep, status, errorMessage }) 
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '0.85rem',
-                padding: '0.6rem 0.85rem',
-                borderRadius: '8px',
-                backgroundColor: isCurrent ? 'rgba(2, 132, 199, 0.12)' : 'transparent',
-                border: isCurrent ? '1px solid rgba(2, 132, 199, 0.3)' : '1px solid transparent',
-                transition: 'all 0.2s'
+                gap: '0.75rem',
+                padding: '0.55rem 0.75rem',
+                borderRadius: '4px',
+                backgroundColor: isCurrent ? 'rgba(37, 99, 235, 0.08)' : 'transparent',
+                border: isCurrent ? '1px solid rgba(37, 99, 235, 0.25)' : '1px solid transparent',
+                transition: 'background-color 0.15s ease'
               }}
             >
               {isDone ? (
-                <CheckCircle2 size={18} color="var(--status-authentic)" />
+                <CheckCircle2 size={16} color="var(--status-authentic)" />
               ) : isCurrent ? (
-                <div style={{ width: '18px', height: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ width: '16px', height: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <div style={{
-                    width: '10px',
-                    height: '10px',
+                    width: '8px',
+                    height: '8px',
                     borderRadius: '50%',
-                    backgroundColor: 'var(--accent-cyan)',
-                    boxShadow: '0 0 10px var(--accent-cyan)'
+                    backgroundColor: 'var(--accent-blue)'
                   }} />
                 </div>
               ) : (
-                <Circle size={18} color="var(--border-subtle)" />
+                <Circle size={16} color="var(--border-subtle)" />
               )}
 
               <span style={{
-                fontSize: '0.9rem',
+                fontSize: '0.85rem',
                 fontWeight: isCurrent ? 600 : 400,
-                color: isDone ? 'var(--text-main)' : isCurrent ? 'var(--accent-cyan)' : 'var(--text-dim)',
+                color: isDone ? 'var(--text-main)' : isCurrent ? 'var(--accent-blue)' : 'var(--text-dim)',
                 fontFamily: isCurrent ? 'var(--font-mono)' : 'inherit'
               }}>
                 {stage.label}

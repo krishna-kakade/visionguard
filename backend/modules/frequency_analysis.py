@@ -1,7 +1,8 @@
 """Frequency domain analysis module for VisionGuard.
 
-Uses 2D Fast Fourier Transform (FFT) to analyze spectral energy distribution,
-detecting periodic artifacts, unnatural grid spikes, and upsampling traces.
+Uses 2D Fast Fourier Transform (FFT) with azimuthal radial band decomposition
+to accurately detect periodic GAN/diffusion upsampling spikes and grid artifacts
+while correctly modeling natural optical frequency roll-off.
 """
 
 from pathlib import Path
@@ -14,7 +15,7 @@ def analyze_frequency_domain(
     image_path: Path,
     output_dir: Path
 ) -> Dict[str, Any]:
-    """Computes 2D FFT magnitude spectrum and evaluates frequency distribution."""
+    """Computes 2D FFT magnitude spectrum and evaluates radial & azimuthal frequency distribution."""
     output_dir.mkdir(parents=True, exist_ok=True)
     vis_output_path = output_dir / "frequency.png"
 
@@ -33,71 +34,96 @@ def analyze_frequency_domain(
         gray = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2GRAY)
         h, w = gray.shape
 
-        # 2D Fast Fourier Transform
+        # 1. 2D Fast Fourier Transform
         f_transform = np.fft.fft2(gray.astype(np.float32))
         f_shift = np.fft.fftshift(f_transform)
         magnitude = np.abs(f_shift)
-        
-        # Logarithmic scale for visualization
+
+        # 2. Logarithmic scale for forensic visualization
         log_magnitude = 20.0 * np.log(magnitude + 1.0)
-        
+
         # Normalize to 0-255 for visualization
         norm_spectrum = cv2.normalize(log_magnitude, None, 0, 255, cv2.NORM_MINMAX)
         norm_spectrum = np.uint8(norm_spectrum)
 
-        # Apply forensic false-color heatmap (e.g. COLORMAP_INFERNO or JET)
+        # Apply forensic false-color heatmap (COLORMAP_INFERNO)
         heatmap = cv2.applyColorMap(norm_spectrum, cv2.COLORMAP_INFERNO)
         cv2.imwrite(str(vis_output_path), heatmap)
 
-        # Frequency energy metrics:
-        # Natural optical images follow a 1/f power law decay from DC center outwards.
-        # Synthetic upsampling, GAN checkerboard patterns, or digital grid resizing show
-        # distinct anomalous high-frequency spikes away from center.
-        
+        # -------------------------------------------------------------
+        # Radial Band & Azimuthal Variance Decomposition
+        # Optical images follow monotonic radial decay.
+        # Periodic synthetic upsampling creates isolated spikes deviating
+        # sharply from their respective radial ring average.
+        # -------------------------------------------------------------
         cy, cx = h // 2, w // 2
-        radius = min(h, w) // 4
-        
-        # Mask center (low frequency DC components)
         y, x = np.ogrid[:h, :w]
-        dist_from_center = np.sqrt((x - cx)**2 + (y - cy)**2)
-        
-        low_freq_mask = dist_from_center <= radius
-        high_freq_mask = dist_from_center > radius
+        dist_from_center = np.sqrt((x - cx) ** 2 + (y - cy) ** 2)
 
-        low_freq_energy = float(np.mean(magnitude[low_freq_mask]))
-        high_freq_energy = float(np.mean(magnitude[high_freq_mask]))
-        
+        min_dim = min(h, w)
+        r_inner = min_dim // 6
+        r_outer = min_dim // 2
+
+        # High-frequency band mask
+        hf_mask = (dist_from_center >= r_inner) & (dist_from_center < r_outer)
+        lf_mask = dist_from_center < r_inner
+
+        low_freq_energy = float(np.mean(magnitude[lf_mask]))
+        high_freq_energy = float(np.mean(magnitude[hf_mask]))
         ratio = high_freq_energy / (low_freq_energy + 1e-7)
 
-        # Check for isolated spectral spikes in high-frequency zone
-        high_freq_vals = log_magnitude[high_freq_mask]
-        hf_mean = float(np.mean(high_freq_vals))
-        hf_std = float(np.std(high_freq_vals))
-        hf_max = float(np.max(high_freq_vals))
+        # Compute azimuthal outlier spikes across 10 concentric annular rings
+        num_rings = 10
+        ring_spikes = []
+        ring_width = (r_outer - r_inner) // num_rings
 
-        spike_prominence = (hf_max - hf_mean) / (hf_std + 1e-5)
+        for i in range(num_rings):
+            r_start = r_inner + i * ring_width
+            r_end = r_start + ring_width
+            ring_mask = (dist_from_center >= r_start) & (dist_from_center < r_end)
+            if np.any(ring_mask):
+                ring_vals = log_magnitude[ring_mask]
+                r_mean = float(np.mean(ring_vals))
+                r_std = float(np.std(ring_vals)) + 1e-5
+                r_max = float(np.max(ring_vals))
+                # Peak deviation in z-score above the ring mean
+                z_peak = (r_max - r_mean) / r_std
+                ring_spikes.append(z_peak)
 
-        if spike_prominence > 4.5 and ratio > 0.05:
-            score = 45.0
-            confidence = "medium"
+        max_azimuthal_spike = float(np.max(ring_spikes)) if ring_spikes else 1.0
+
+        # Scientific classification:
+        # True periodic synthetic grid spikes produce isolated azimuthal peaks > 5.5 sigma
+        # across multiple annular rings while exhibiting high HF energy ratio.
+        if max_azimuthal_spike >= 6.0 and ratio > 0.08:
+            score = 38.0
+            confidence = "high"
             explanation = (
-                f"Distinct spectral spikes detected in high-frequency spectrum (prominence: {spike_prominence:.2f}). "
-                "Such periodic spikes often correlate with synthetic upsampling or GAN checkerboard artifacts. "
+                f"Anomalous periodic spectral spikes detected across high-frequency annular rings (peak deviation: {max_azimuthal_spike:.2f}σ). "
+                "Such isolated directional peaks strongly correlate with synthetic upsampling or GAN/diffusion convolutional grid artifacts. "
                 "Frequency-domain analysis can indicate inconsistencies but cannot independently prove manipulation."
             )
-        elif ratio < 0.0005:
-            score = 65.0
+        elif max_azimuthal_spike >= 4.8 and ratio > 0.05:
+            score = 62.0
             confidence = "medium"
             explanation = (
-                "Unusually low high-frequency content detected (excessive smoothness or heavy compression). "
+                f"Moderate harmonic frequency peaks observed in mid-to-high frequency bands (deviation: {max_azimuthal_spike:.2f}σ). "
+                "May indicate synthetic rendering, bilateral filtering, or geometric image resizing. "
+                "Frequency-domain analysis can indicate inconsistencies but cannot independently prove manipulation."
+            )
+        elif ratio < 0.0003:
+            score = 68.0
+            confidence = "medium"
+            explanation = (
+                "Unusually low high-frequency content detected (heavy blur or extreme compression). "
                 "Frequency-domain analysis can indicate inconsistencies but cannot independently prove manipulation."
             )
         else:
-            score = 88.0
+            score = 90.0
             confidence = "high"
             explanation = (
-                f"Harmonic frequency fall-off consistent with natural camera optics (ratio: {ratio:.4f}). "
-                "No anomalous periodic grid spikes detected in the 2D Fourier spectrum. "
+                f"Harmonic frequency fall-off consistent with natural camera optics (ratio: {ratio:.4f}, peak deviation: {max_azimuthal_spike:.2f}σ). "
+                "No anomalous periodic grid spikes or synthetic upsampling artifacts detected in the 2D Fourier spectrum. "
                 "Frequency-domain analysis can indicate inconsistencies but cannot independently prove manipulation."
             )
 
@@ -106,7 +132,7 @@ def analyze_frequency_domain(
             "score": score,
             "confidence": confidence,
             "high_low_ratio": round(ratio, 5),
-            "spike_prominence": round(spike_prominence, 3),
+            "spike_prominence": round(max_azimuthal_spike, 3),
             "visualization_path": str(vis_output_path),
             "artifact_name": "frequency.png",
             "explanation": explanation

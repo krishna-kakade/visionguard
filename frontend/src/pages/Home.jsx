@@ -34,11 +34,11 @@ export default function Home({ onStartAnalysis, isAnalyzing, onTriggerDemo }) {
               <div style={{
                 padding: '8px',
                 borderRadius: '8px',
-                backgroundColor: 'rgba(2, 132, 199, 0.15)',
+                backgroundColor: 'rgba(59, 130, 246, 0.12)',
                 display: 'inline-flex',
                 marginBottom: '1rem'
               }}>
-                <Cpu size={20} color="var(--accent-cyan)" />
+                <Cpu size={20} color="var(--accent-blue)" />
               </div>
               <h4 style={{ fontSize: '1rem', fontWeight: 600, color: '#fff', marginBottom: '0.4rem' }}>
                 Error Level Analysis (ELA)
@@ -52,7 +52,7 @@ export default function Home({ onStartAnalysis, isAnalyzing, onTriggerDemo }) {
               <div style={{
                 padding: '8px',
                 borderRadius: '8px',
-                backgroundColor: 'rgba(2, 132, 199, 0.15)',
+                backgroundColor: 'rgba(59, 130, 246, 0.12)',
                 display: 'inline-flex',
                 marginBottom: '1rem'
               }}>
@@ -70,11 +70,11 @@ export default function Home({ onStartAnalysis, isAnalyzing, onTriggerDemo }) {
               <div style={{
                 padding: '8px',
                 borderRadius: '8px',
-                backgroundColor: 'rgba(2, 132, 199, 0.15)',
+                backgroundColor: 'rgba(59, 130, 246, 0.12)',
                 display: 'inline-flex',
                 marginBottom: '1rem'
               }}>
-                <Search size={20} color="#a855f7" />
+                <Search size={20} color="var(--accent-blue)" />
               </div>
               <h4 style={{ fontSize: '1rem', fontWeight: 600, color: '#fff', marginBottom: '0.4rem' }}>
                 OCR & Claim Fact-Checking

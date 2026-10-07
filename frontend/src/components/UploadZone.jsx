@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { UploadCloud, Image as ImageIcon, AlertCircle, FileCheck, ArrowRight, Sparkles } from 'lucide-react';
+import { UploadCloud, AlertCircle, FileCheck, ArrowRight, Sparkles } from 'lucide-react';
 
 export default function UploadZone({ onStartAnalysis, isAnalyzing, onTriggerDemo }) {
   const [dragActive, setDragActive] = useState(false);
@@ -31,7 +31,6 @@ export default function UploadZone({ onStartAnalysis, isAnalyzing, onTriggerDemo
     const objectUrl = URL.createObjectURL(file);
     setPreviewUrl(objectUrl);
 
-    // Read dimensions
     const img = new Image();
     img.onload = () => {
       setImageMeta({
@@ -68,24 +67,20 @@ export default function UploadZone({ onStartAnalysis, isAnalyzing, onTriggerDemo
   };
 
   return (
-    <div style={{ maxWidth: '840px', margin: '0 auto', textAlign: 'center' }}>
+    <div style={{ maxWidth: '820px', margin: '0 auto', textAlign: 'center' }}>
       {/* Hero section */}
       <div style={{ marginBottom: '2.5rem' }}>
         <h2 style={{
-          fontSize: '2.75rem',
-          fontWeight: 800,
-          color: '#fff',
+          fontSize: '2.5rem',
+          fontWeight: 700,
+          color: 'var(--text-main)',
           letterSpacing: '-0.02em',
-          lineHeight: 1.2,
+          lineHeight: 1.25,
           marginBottom: '0.75rem'
         }}>
-          Analyze. Verify. <span style={{
-            background: 'linear-gradient(90deg, #00f0ff 0%, #38bdf8 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent'
-          }}>Understand.</span>
+          Analyze. Verify. Understand.
         </h2>
-        <p style={{ fontSize: '1.05rem', color: 'var(--text-muted)', maxWidth: '620px', margin: '0 auto' }}>
+        <p style={{ fontSize: '1rem', color: 'var(--text-muted)', maxWidth: '640px', margin: '0 auto' }}>
           Multimodal forensic investigation assistant for detecting digital tampering,
           splicing, recompression discrepancies, AI-generation traces, and unverified textual claims.
         </p>
@@ -99,13 +94,12 @@ export default function UploadZone({ onStartAnalysis, isAnalyzing, onTriggerDemo
         onDrop={handleDrop}
         onClick={() => !selectedFile && inputRef.current?.click()}
         style={{
-          border: `2px dashed ${dragActive ? 'var(--accent-cyan)' : selectedFile ? 'var(--accent-blue)' : 'var(--border-subtle)'}`,
-          backgroundColor: dragActive ? 'rgba(0, 240, 255, 0.05)' : 'var(--bg-card)',
-          borderRadius: '16px',
+          border: `2px dashed ${dragActive ? 'var(--accent-blue)' : selectedFile ? '#3b82f6' : 'var(--border-subtle)'}`,
+          backgroundColor: dragActive ? 'rgba(59, 130, 246, 0.04)' : 'var(--bg-card)',
+          borderRadius: '8px',
           padding: selectedFile ? '2rem' : '3.5rem 2rem',
           cursor: selectedFile ? 'default' : 'pointer',
-          transition: 'all 0.2s',
-          boxShadow: dragActive ? '0 0 25px rgba(0, 240, 255, 0.15)' : 'none',
+          transition: 'border-color 0.15s ease, background-color 0.15s ease',
           position: 'relative'
         }}
       >
@@ -120,22 +114,22 @@ export default function UploadZone({ onStartAnalysis, isAnalyzing, onTriggerDemo
         {!selectedFile ? (
           <div>
             <div style={{
-              width: '64px',
-              height: '64px',
-              borderRadius: '50%',
-              backgroundColor: 'rgba(2, 132, 199, 0.15)',
+              width: '56px',
+              height: '56px',
+              borderRadius: '6px',
+              backgroundColor: 'rgba(59, 130, 246, 0.1)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               margin: '0 auto 1.25rem',
-              border: '1px solid rgba(2, 132, 199, 0.3)'
+              border: '1px solid rgba(59, 130, 246, 0.2)'
             }}>
-              <UploadCloud size={32} color="var(--accent-blue)" />
+              <UploadCloud size={28} color="var(--accent-blue)" />
             </div>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 600, color: '#fff', marginBottom: '0.5rem' }}>
-              Drag & Drop your image here, or <span style={{ color: 'var(--accent-cyan)' }}>Browse</span>
+            <h3 style={{ fontSize: '1.15rem', fontWeight: 600, color: 'var(--text-main)', marginBottom: '0.5rem' }}>
+              Drag & Drop your image here, or <span style={{ color: 'var(--accent-blue)', textDecoration: 'underline' }}>Browse File</span>
             </h3>
-            <p style={{ fontSize: '0.85rem', color: 'var(--text-dim)', marginBottom: '1.5rem' }}>
+            <p style={{ fontSize: '0.82rem', color: 'var(--text-dim)', marginBottom: '1.5rem' }}>
               Supported formats: JPG · JPEG · PNG · WEBP (Max 10 MB)
             </p>
 
@@ -145,10 +139,10 @@ export default function UploadZone({ onStartAnalysis, isAnalyzing, onTriggerDemo
                 type="button"
                 onClick={(e) => { e.stopPropagation(); onTriggerDemo(); }}
                 className="btn-secondary"
-                style={{ fontSize: '0.85rem', padding: '0.45rem 1rem' }}
+                style={{ fontSize: '0.82rem', padding: '0.45rem 1rem' }}
               >
-                <Sparkles size={14} color="#c084fc" />
-                <span>Or inspect sample demo case</span>
+                <Sparkles size={14} color="var(--accent-blue)" />
+                <span>Or load sample precomputed case</span>
               </button>
             </div>
           </div>
@@ -158,16 +152,16 @@ export default function UploadZone({ onStartAnalysis, isAnalyzing, onTriggerDemo
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              gap: '1.5rem'
+              gap: '1.25rem'
             }}>
               {/* Image preview */}
               <div style={{
                 position: 'relative',
-                borderRadius: '10px',
+                borderRadius: '6px',
                 overflow: 'hidden',
                 border: '1px solid var(--border-subtle)',
                 maxHeight: '320px',
-                boxShadow: '0 8px 24px rgba(0,0,0,0.4)'
+                backgroundColor: '#000'
               }}>
                 <img
                   src={previewUrl}
@@ -185,17 +179,17 @@ export default function UploadZone({ onStartAnalysis, isAnalyzing, onTriggerDemo
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '1.5rem',
+                gap: '1.25rem',
                 backgroundColor: 'var(--bg-secondary)',
-                padding: '0.75rem 1.5rem',
-                borderRadius: '8px',
+                padding: '0.65rem 1.25rem',
+                borderRadius: '6px',
                 border: '1px solid var(--border-subtle)',
-                fontSize: '0.85rem',
+                fontSize: '0.82rem',
                 color: 'var(--text-muted)'
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#fff', fontWeight: 600 }}>
-                  <FileCheck size={16} color="var(--accent-cyan)" />
-                  <span style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  <FileCheck size={16} color="var(--accent-blue)" />
+                  <span style={{ maxWidth: '220px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     {selectedFile.name}
                   </span>
                 </div>
@@ -211,7 +205,7 @@ export default function UploadZone({ onStartAnalysis, isAnalyzing, onTriggerDemo
                 <button
                   type="button"
                   onClick={() => { setSelectedFile(null); setPreviewUrl(null); }}
-                  style={{ color: '#f87171', fontSize: '0.8rem', textDecoration: 'underline' }}
+                  style={{ color: '#ef4444', fontSize: '0.8rem', textDecoration: 'underline' }}
                 >
                   Change
                 </button>
@@ -224,10 +218,10 @@ export default function UploadZone({ onStartAnalysis, isAnalyzing, onTriggerDemo
                   onClick={handleAnalyzeClick}
                   disabled={isAnalyzing}
                   className="btn-primary"
-                  style={{ fontSize: '1rem', padding: '0.85rem 2.25rem' }}
+                  style={{ fontSize: '0.95rem', padding: '0.8rem 2rem' }}
                 >
-                  <span>Launch Deep Forensic Analysis</span>
-                  <ArrowRight size={18} />
+                  <span>Launch Forensic Analysis</span>
+                  <ArrowRight size={17} />
                 </button>
               </div>
             </div>
@@ -239,18 +233,18 @@ export default function UploadZone({ onStartAnalysis, isAnalyzing, onTriggerDemo
       {errorMsg && (
         <div style={{
           marginTop: '1.25rem',
-          backgroundColor: 'rgba(239, 68, 68, 0.15)',
-          border: '1px solid rgba(239, 68, 68, 0.4)',
+          backgroundColor: 'rgba(220, 38, 38, 0.1)',
+          border: '1px solid rgba(220, 38, 38, 0.35)',
           color: '#fca5a5',
           padding: '0.75rem 1rem',
-          borderRadius: '8px',
+          borderRadius: '6px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           gap: '0.5rem',
-          fontSize: '0.88rem'
+          fontSize: '0.85rem'
         }}>
-          <AlertCircle size={16} color="#ef4444" />
+          <AlertCircle size={16} color="#dc2626" />
           <span>{errorMsg}</span>
         </div>
       )}

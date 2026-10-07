@@ -1,5 +1,5 @@
 import React from 'react';
-import { Bot, User, Sparkles, AlertCircle } from 'lucide-react';
+import { Bot, User } from 'lucide-react';
 
 export default function AIDetectorCard({ aiData }) {
   if (!aiData) return null;
@@ -20,10 +20,11 @@ export default function AIDetectorCard({ aiData }) {
         {aiData.is_experimental && (
           <span style={{
             fontSize: '0.72rem',
-            backgroundColor: 'rgba(2, 132, 199, 0.2)',
-            color: 'var(--accent-cyan)',
+            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+            color: 'var(--accent-blue)',
             padding: '2px 8px',
             borderRadius: '4px',
+            border: '1px solid rgba(59, 130, 246, 0.25)',
             fontFamily: 'var(--font-mono)'
           }}>
             Experimental Baseline
@@ -34,22 +35,22 @@ export default function AIDetectorCard({ aiData }) {
       {/* Visual probability comparison bar */}
       {aiProb !== null ? (
         <div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.88rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.85rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#f87171', fontWeight: 600 }}>
-              <Bot size={16} />
+              <Bot size={15} />
               <span>Synthetic / AI: {aiProb}%</span>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#34d399', fontWeight: 600 }}>
-              <User size={16} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#4ade80', fontWeight: 600 }}>
+              <User size={15} />
               <span>Organic / Optical: {humanProb}%</span>
             </div>
           </div>
 
           {/* Dual progress bar */}
           <div style={{
-            height: '10px',
-            backgroundColor: '#10b981',
-            borderRadius: '6px',
+            height: '8px',
+            backgroundColor: '#16a34a',
+            borderRadius: '4px',
             overflow: 'hidden',
             display: 'flex',
             marginBottom: '1rem',
@@ -57,7 +58,7 @@ export default function AIDetectorCard({ aiData }) {
           }}>
             <div style={{
               width: `${aiProb}%`,
-              backgroundColor: '#ef4444',
+              backgroundColor: '#dc2626',
               transition: 'width 0.8s ease-in-out'
             }} />
           </div>
@@ -73,14 +74,17 @@ export default function AIDetectorCard({ aiData }) {
               gap: '0.5rem',
               backgroundColor: 'var(--bg-secondary)',
               padding: '0.6rem',
-              borderRadius: '6px',
+              borderRadius: '4px',
+              border: '1px solid var(--border-subtle)',
               fontSize: '0.72rem',
               color: 'var(--text-dim)',
               fontFamily: 'var(--font-mono)'
             }}>
               <div>Laplacian Var: <strong style={{ color: 'var(--text-main)' }}>{aiData.metrics.laplacian_variance}</strong></div>
+              <div>Kurtosis: <strong style={{ color: 'var(--text-main)' }}>{aiData.metrics.residual_kurtosis || 'N/A'}</strong></div>
+              <div>Spectral Slope: <strong style={{ color: 'var(--text-main)' }}>{aiData.metrics.spectral_slope || 'N/A'}</strong></div>
+              <div>Patch Dispersion: <strong style={{ color: 'var(--text-main)' }}>{aiData.metrics.patch_dispersion || 'N/A'}</strong></div>
               <div>Saturation Mean: <strong style={{ color: 'var(--text-main)' }}>{aiData.metrics.saturation_mean}</strong></div>
-              <div>Gradient Ratio: <strong style={{ color: 'var(--text-main)' }}>{aiData.metrics.gradient_ratio}</strong></div>
             </div>
           )}
         </div>

@@ -165,10 +165,10 @@ def evaluate_authenticity(
     # < 45: Highly Suspicious
     # Or Insufficient Evidence if confidence is low across the board
     
-    # Check if there is a severe red flag (e.g. copy move clusters or high ELA anomaly)
+    # Check if there is a severe red flag (e.g. copy move clusters or genuine ELA block disparity)
     severe_tampering = (
-        (copy_move_res.get("suspicious_clusters", 0) >= 6) or
-        (ela_res.get("anomaly_ratio", 0) > 2.5 and ela_res.get("max_difference", 0) > 50)
+        (copy_move_res.get("suspicious_clusters", 0) >= 4) or
+        (ela_res.get("block_disparity", 0) >= 3.5 and ela_res.get("max_difference", 0) > 45.0 and ela_res.get("mean_difference", 0) >= 3.0)
     )
 
     if severe_tampering:

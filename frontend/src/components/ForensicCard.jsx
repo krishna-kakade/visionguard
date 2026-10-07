@@ -1,5 +1,5 @@
 import React from 'react';
-import { FileText, Cpu, Copy, Radio, CheckCircle, AlertCircle, HelpCircle } from 'lucide-react';
+import { FileText, Cpu, Copy, Radio } from 'lucide-react';
 
 const ICONS = {
   metadata: FileText,
@@ -14,7 +14,6 @@ export default function ForensicCard({ type, title, data }) {
   if (!data) return null;
 
   const isSuccess = data.status === 'success';
-  const isUnavailable = data.status === 'unavailable';
   const score = data.score !== null && data.score !== undefined ? data.score : null;
 
   let badgeColor = 'var(--text-dim)';
@@ -24,15 +23,15 @@ export default function ForensicCard({ type, title, data }) {
   if (isSuccess) {
     if (score !== null && score >= 70) {
       badgeColor = 'var(--status-authentic)';
-      badgeBg = 'rgba(16, 185, 129, 0.15)';
+      badgeBg = 'rgba(22, 163, 74, 0.12)';
       statusText = 'Consistent';
     } else if (score !== null && score >= 45) {
       badgeColor = 'var(--status-suspicious)';
-      badgeBg = 'rgba(245, 158, 11, 0.15)';
+      badgeBg = 'rgba(217, 119, 6, 0.12)';
       statusText = 'Anomalous';
     } else {
       badgeColor = 'var(--status-fake)';
-      badgeBg = 'rgba(239, 68, 68, 0.15)';
+      badgeBg = 'rgba(220, 38, 38, 0.12)';
       statusText = 'Suspicious';
     }
   }
@@ -43,24 +42,24 @@ export default function ForensicCard({ type, title, data }) {
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <div style={{
-            padding: '6px',
-            borderRadius: '6px',
-            backgroundColor: 'rgba(2, 132, 199, 0.15)',
+            padding: '5px',
+            borderRadius: '4px',
+            backgroundColor: 'rgba(37, 99, 235, 0.12)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center'
           }}>
-            <IconComponent size={18} color="var(--accent-blue)" />
+            <IconComponent size={16} color="var(--accent-blue)" />
           </div>
-          <h4 style={{ fontSize: '0.95rem', fontWeight: 600, color: '#fff' }}>{title}</h4>
+          <h4 style={{ fontSize: '0.92rem', fontWeight: 600, color: '#fff' }}>{title}</h4>
         </div>
 
         <span style={{
-          fontSize: '0.75rem',
+          fontSize: '0.72rem',
           fontWeight: 600,
           color: badgeColor,
           backgroundColor: badgeBg,
-          padding: '2px 8px',
+          padding: '2px 7px',
           borderRadius: '4px',
           fontFamily: 'var(--font-mono)'
         }}>
@@ -79,13 +78,13 @@ export default function ForensicCard({ type, title, data }) {
       }}>
         {score !== null ? (
           <>
-            <span style={{ fontSize: '1.5rem', fontWeight: 700, color: '#fff', fontFamily: 'var(--font-mono)' }}>
+            <span style={{ fontSize: '1.4rem', fontWeight: 700, color: '#fff', fontFamily: 'var(--font-mono)' }}>
               {Math.round(score)}
             </span>
             <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>/ 100</span>
           </>
         ) : (
-          <span style={{ fontSize: '1rem', color: 'var(--text-dim)', fontStyle: 'italic' }}>
+          <span style={{ fontSize: '0.95rem', color: 'var(--text-dim)', fontStyle: 'italic' }}>
             N/A
           </span>
         )}
@@ -112,12 +111,12 @@ export default function ForensicCard({ type, title, data }) {
       {type === 'metadata' && (
         <div style={{ marginTop: '0.75rem', display: 'flex', flexWrap: 'wrap', gap: '0.4rem', fontSize: '0.72rem' }}>
           {data.camera_make && (
-            <span style={{ backgroundColor: 'var(--bg-secondary)', padding: '2px 6px', borderRadius: '4px', color: 'var(--accent-cyan)' }}>
+            <span style={{ backgroundColor: 'var(--bg-secondary)', padding: '2px 6px', borderRadius: '4px', color: 'var(--accent-blue)' }}>
               Camera: {data.camera_make}
             </span>
           )}
           {data.software && (
-            <span style={{ backgroundColor: 'var(--bg-secondary)', padding: '2px 6px', borderRadius: '4px', color: '#f59e0b' }}>
+            <span style={{ backgroundColor: 'var(--bg-secondary)', padding: '2px 6px', borderRadius: '4px', color: '#d97706' }}>
               Software: {data.software}
             </span>
           )}
@@ -133,9 +132,9 @@ export default function ForensicCard({ type, title, data }) {
         </div>
       )}
 
-      {type === 'ela' && data.anomaly_ratio !== undefined && (
+      {type === 'ela' && data.block_disparity !== undefined && (
         <div style={{ marginTop: '0.75rem', fontSize: '0.75rem', color: 'var(--text-dim)' }}>
-          Anomaly Ratio: <strong style={{ color: 'var(--text-main)' }}>{data.anomaly_ratio}</strong> | Max Diff: <strong style={{ color: 'var(--text-main)' }}>{data.max_difference}</strong>
+          Block Disparity: <strong style={{ color: 'var(--text-main)' }}>{data.block_disparity}</strong> | Max Error: <strong style={{ color: 'var(--text-main)' }}>{data.max_difference}</strong>
         </div>
       )}
     </div>
